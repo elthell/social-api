@@ -36,8 +36,8 @@ module.exports = {
       // push the created thought's `_id` to the associated user's `thoughts` array field
       const user = await User.findOneAndUpdate(
         { _id: req.body.userId },
-        { $push: { thoughts: _id } },
-        { new: true }
+        { $addToSet: { thoughts: _id } },
+        { runValidators: true, new: true }
       );
       if (!user) {
         return res
@@ -46,6 +46,7 @@ module.exports = {
       }
 
       res.json(thought);
+      res.json(user);
     } catch (err) {
       res.status(500).json(err);
     }
